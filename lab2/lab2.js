@@ -85,3 +85,56 @@ const productCard = `
     Tình trạng: ${product.inStock}`; // Viết template ở đây
 console.log(productCard);
 
+// Viết lại object sau sử dụng ES6 enhanced object literals
+// const width = 100;
+// const height = 200;
+// const color = "red";
+
+// const rectangle = {
+//   width: width,
+//   height: height,
+//   color: color,
+//   calculateArea: function () {
+//     return this.width * this.height;
+//   },
+//   describe: function () {
+//     return `Rectangle ${this.width}x${this.height}, color: ${this.color}`;
+//   },
+// };
+
+const width = 100;
+const height = 200;
+const color = "red";
+
+const rectangle = {
+  width,
+  height,
+  color,
+
+  calculateArea() {
+    return this.width * this.height;
+  },
+
+  describe() {
+    return `Rectangle ${this.width}x${this.height}, color: ${this.color}`;
+  },
+};
+
+console.log(rectangle.describe());
+console.log("Diện tích:", rectangle.calculateArea());
+
+// Bài 2: Sử dụng computed properties
+
+// // Tạo object configuration với computed property names
+// const env = "production";
+// const version = "v2";
+// const features = ["auth", "payment", "notification"];
+
+// // Tạo object config với:
+// // - key: `api_${env}_${version}`
+// // - key cho từng feature: `feature_${featureName}`
+// // - method: `get${env}Config()`
+
+// const config = {
+//   // Viết code ở đây
+// };
