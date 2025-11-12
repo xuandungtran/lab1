@@ -66,22 +66,82 @@ function delay(ms) {
 
 delay(2000).then(() => console.log("2 seconds passed"));
 
-
-// Bài 2: Viết hàm fetchMultipleData
+// Bài 2: 
 function fetchMultipleData(urls) {
-  // Trả về Promise
   return Promise.all(
     urls.map((url) =>
-      fetch(url).then((response) => {
-        if (!response.ok) {
-          throw new Error(`Lỗi khi fetch ${url}`);
-        }
-        return response.json();
-      })
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error(`Lỗi khi fetch ${url}`);
+          return res.json();
+        })
     )
   );
 }
-
-fetchMultipleData(["/api/user/1", "/api/user/2"])
-  .then((users) => console.log(users))
+fetchMultipleData([
+  "https://jsonplaceholder.typicode.com/users/1",
+  "https://jsonplaceholder.typicode.com/users/2",
+])
+  .then((users) => console.log("Kết quả:", users))
   .catch((error) => console.error("Lỗi:", error));
+
+
+
+// Bài 1: Viết lại callback hell thành async/await
+  // Viết lại hàm này sử dụng async/await
+function processOrder(orderId, callback) {
+  getOrder(orderId, (order) => {
+    getUser(order.userId, (user) => {
+      getProducts(order.productIds, (products) => {
+        callback({ order, user, products });
+      });
+    });
+  });
+}
+
+// 
+function getOrder(orderId) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ id: orderId, userId: 1, productIds: [101, 102] }), 1000);
+  });
+}
+
+function getUser(userId) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ id: userId, name: "JavaScript User" }), 1000);
+  });
+}
+
+function getProducts(productIds) {
+  return new Promise((resolve) => {
+    setTimeout(
+      () => resolve(productIds.map((id) => ({ id, name: `Product ${id}` }))),
+      1000
+    );
+  });
+}
+async function processOrder(orderId) {
+  try {
+    const order = await getOrder(orderId); // Đợi lấy đơn hàng
+    const user = await getUser(order.userId); // Đợi lấy thông tin user
+    const products = await getProducts(order.productIds); // Đợi lấy danh sách sản phẩm
+
+    return { order, user, products }; // Trả về kết quả tổng hợp
+  } catch (error) {
+    console.error("Lỗi khi xử lý đơn hàng:", error);
+  }
+}
+
+// Gọi hàm và hiển thị kết quả
+processOrder(123).then((result) => console.log(result));
+
+// Bài 2: Xử lý lỗi với async/await
+async function safeApiCall(apiFunction, ...args) {
+  try {
+    const result = await apiFunction(...args); // Gọi hàm API
+    return result; // Thành công → trả về kết quả
+  } catch (error) {
+    console.error("Lỗi khi gọi API:", error.message || error);
+    return null; // Trả về null nếu có lỗi
+  }
+}
